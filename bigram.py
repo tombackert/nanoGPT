@@ -35,22 +35,11 @@ decode = lambda l: ''.join([itos[i] for i in l]) # decoder: take a list of integ
 # encoding the entire text dataset and store it into a torch.Tensor
 data = torch.tensor(encode(text), dtype=torch.long)
 # data split up in test & validation sets
-n = int(0.9 * len(data)) # first 90% will be training data, the rest will be validation set
+n = int(0.9*len(data)) # first 90% will be training data, the rest will be validation set
 train_data = data[:n]
-val_data = data[n:] 
-
-
-
-x = train_data[:block_size]
-y = train_data[1:block_size+1]
-for t in range(block_size):
-    context = x[:t+1]
-    target = y[t]
-
+val_data = data[n:]
 
 # introducing the batch dimension for gpu efficency
-
-
 def get_batch(split):
     # generate a small batch of data of inputs y and targets y
     data = train_data if split == 'train' else val_data
@@ -118,7 +107,7 @@ model = BigramLanguageModel(vocab_size)
 m = model.to(device)
 
 # create a PyTorch optimizer
-optimizer = torch.optim.AdamW(m.parameters(), lr=1e-3)
+optimizer = torch.optim.AdamW(m.parameters(), lr=learning_rate)
 
 # Training loop
 
@@ -140,4 +129,4 @@ for iter in range(max_iters): # training steps
 
 # generate from the model
 context = torch.zeros((1, 1), dtype=torch.long, device=device)
-print(decode(m.generate(context, max_new_tokens=500[0].tolist())))
+print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
