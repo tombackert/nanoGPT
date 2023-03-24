@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import functional as F
 
 # hyperparameters
-batch_size = 4 # how many independent sequences are processed in parallel
+batch_size = 32 # how many independent sequences are processed in parallel
 block_size = 8 # the maximum context length for predictions
 max_iters = 5000
 eval_interval = 500
@@ -74,9 +74,8 @@ class Head(nn.Module):
         self.value = nn.Linear(n_embd, head_size, bias=False)
         self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
 
-    def forword(self, x):
-        torch.manual_seed(1337)
-        B,T,C = 4,8,32 # batch, time, channels
+    def forward(self, x):
+        B,T,C = x.shape # batch, time, channels
         k = self.key(x)   # (B, T, 16)
         q = self.query(x) # (B, T, 16)
         # compute attention scores ("affinities")
