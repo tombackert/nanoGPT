@@ -141,7 +141,7 @@ class Block(nn.Module):
 
 # feeding the input into a neural net
 # biagram model 
-class BigramLanguageModel(nn.Module):
+class GPTLanguageModel(nn.Module):
 
     def __init__(self):
         super().__init__()
@@ -191,7 +191,7 @@ class BigramLanguageModel(nn.Module):
         return idx
 
 
-model = BigramLanguageModel()
+model = GPTLanguageModel()
 m = model.to(device)
 
 # create a PyTorch optimizer
